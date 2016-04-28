@@ -277,9 +277,11 @@ after class construction. This allows you to perform any set up procedures for y
 new object. The callback function takes one parameter, an instance of the new object.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// The callback will be passed the object that was constructed
-</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'PDO'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'mysql:host=localhost;dbname=test'</span><span class="p">,</span><span class="s1">'user'</span><span class="p">,</span><span class="s1">'pass'</span><span class="p">),</span> <span class="k">function</span><span class="p">(</span><span class="nv">$db</span><span class="p">){</span>
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'PDO'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'mysql:host=localhost;dbname=test'</span><span class="p">,</span><span class="s1">'user'</span><span class="p">,</span><span class="s1">'pass'</span><span class="p">),</span>
+  <span class="k">function</span><span class="p">(</span><span class="nv">$db</span><span class="p">){</span>
     <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">);</span>
-<span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">);</span>
 </code></pre>
 </div>
 
@@ -958,6 +960,8 @@ the same name on the Engine object.</p>
     <div>
         
 <p>Copyright © Mike Cao and other flightphp.com contributors</p>
+
+<p><a href="https://github.com/mikecao/flightphp.com">Fork this website on GitHub</a></p>
 
     </div>
     <a class="github-button" href="https://github.com/mikecao/flight" data-count-href="/mikecao/flight/stargazers" data-count-api="/repos/mikecao/flight#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star mikecao/flight on GitHub">Star</a>

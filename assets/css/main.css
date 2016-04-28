@@ -95,7 +95,7 @@ hr {
 #menu {
   position: absolute;
   top: 20px;
-  width: 180px;
+  width: 160px;
   padding: 0;
   margin: 0;
 }
@@ -110,7 +110,7 @@ hr {
 }
 
 #docs {
-  margin-left: 180px;
+  margin-left: 160px;
   padding-left: 30px;
   border-left: 1px solid #ddd;
 }
