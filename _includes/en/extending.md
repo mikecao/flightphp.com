@@ -53,9 +53,11 @@ new object. The callback function takes one parameter, an instance of the new ob
 
 ``` php?start_inline=1
 // The callback will be passed the object that was constructed
-Flight::register('db', 'PDO', array('mysql:host=localhost;dbname=test','user','pass'), function($db){
+Flight::register('db', 'PDO', array('mysql:host=localhost;dbname=test','user','pass'),
+  function($db){
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-});
+  }
+);
 ```
 
 By default, every time you load your class you will get a shared instance.
