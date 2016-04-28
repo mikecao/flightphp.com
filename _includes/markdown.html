@@ -1,0 +1,2 @@
+{% capture markdownContent %}{% include {{include.lang}}/{{include.page}} %}{% endcapture %}
+{{ markdownContent | markdownify }}
