@@ -1,1 +1,0 @@
-Copyright &copy; Mike Cao and other flightphp.com contributors
