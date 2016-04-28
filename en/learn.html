@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flight - An extensible micro-framework for PHP</title>
+  <link href='http://fonts.googleapis.com/css?family=Mr+Dafoe' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png" />
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/highlight.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/jquery-1.12.3.min.js"></script>
+  <script src="/assets/js/main.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+  <div id="title">Flight</div>
+  <div id="subtitle">
+    
+
+<p>An extensible micro-framework for PHP</p>
+
+  </div>
+  <div id="nav">
+    
+
+<p><a href="/en/">about</a>
+<a href="/en/install">install</a>
+<a href="/en/learn">learn</a>
+<a href="https://github.com/mikecao/flight">code</a></p>
+
+  </div>
+</div>
+
+    <div id="content">
+        <div>
+    <div id="menu">
+        
+
+<ul>
+  <li><a href="#routing">Routing</a></li>
+  <li><a href="#extending">Extending</a></li>
+  <li><a href="#overriding">Overriding</a></li>
+  <li><a href="#filtering">Filtering</a></li>
+  <li><a href="#variables">Variables</a></li>
+  <li><a href="#views">Views</a></li>
+  <li><a href="#errorhandling">Error Handling</a></li>
+  <li><a href="#redirects">Redirects</a></li>
+  <li><a href="#requests">Requests</a></li>
+  <li><a href="#stopping">Stopping</a></li>
+  <li><a href="#httpcaching">HTTP Caching</a></li>
+  <li><a href="#json">JSON</a></li>
+  <li><a href="#configuration">Configuration</a></li>
+  <li><a href="#frameworkmethods">Framework Methods</a></li>
+  <li><a href="#frameworkinstance">Framework Instance</a></li>
+</ul>
+
+    </div>
+    <div id="docs">
+        <a name="routing"></a>
+        
+
+<h1 id="routing">Routing</h1>
+
+<p>Routing in Flight is done by matching a URL pattern with a callback function.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>The callback can be any object that is callable. So you can use a regular function:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">function</span> <span class="nf">hello</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Or a class method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Greeting</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">hello</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'Greeting'</span><span class="p">,</span><span class="s1">'hello'</span><span class="p">));</span>
+</code></pre>
+</div>
+
+<p>Routes are matched in the order they are defined. The first route to match a request will be invoked.</p>
+
+<h2 id="method-routing">Method Routing</h2>
+
+<p>By default, route patterns are matched against all request methods. You can respond to specific methods by placing an identifier before the URL.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'GET /'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'I received a GET request.'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'POST /'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'I received a POST request.'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>You can also map multiple methods to a single callback by using a <code class="highlighter-rouge">|</code> delimiter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'GET|POST /'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'I received either a GET or a POST request.'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="regular-expressions">Regular Expressions</h2>
+
+<p>You can use regular expressions in your routes:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/user/[0-9]+'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// This will match /user/1234
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="named-parameters">Named Parameters</h2>
+
+<p>You can specify named parameters in your routes which will be passed along to your callback function.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/@name/@id'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$id</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="s2">"hello, </span><span class="nv">$name</span><span class="s2"> (</span><span class="nv">$id</span><span class="s2">)!"</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>You can also include regular expressions with your named parameters by using the <code class="highlighter-rouge">:</code> delimiter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/@name/@id:[0-9]{3}'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$id</span><span class="p">){</span>
+    <span class="c1">// This will match /bob/123
+</span>    <span class="c1">// But will not match /bob/12345
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="optional-parameters">Optional Parameters</h2>
+
+<p>You can specify named parameters that are optional for matching by wrapping segments in parentheses.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/blog(/@year(/@month(/@day)))'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$year</span><span class="p">,</span> <span class="nv">$month</span><span class="p">,</span> <span class="nv">$day</span><span class="p">){</span>
+    <span class="c1">// This will match the following URLS:
+</span>    <span class="c1">// /blog/2012/12/10
+</span>    <span class="c1">// /blog/2012/12
+</span>    <span class="c1">// /blog/2012
+</span>    <span class="c1">// /blog
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Any optional parameters that are not matched will be passed in as NULL.</p>
+
+<h2 id="wildcards">Wildcards</h2>
+
+<p>Matching is only done on individual URL segments. If you want to match multiple segments you can use the <code class="highlighter-rouge">*</code> wildcard.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/blog/*'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// This will match /blog/2000/02/01
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<p>To route all requests to a single callback, you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'*'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// Do something
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="passing">Passing</h2>
+
+<p>You can pass execution on to the next matching route by returning <code class="highlighter-rouge">true</code> from your callback function.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/user/@name'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
+    <span class="c1">// Check some condition
+</span>    <span class="k">if</span> <span class="p">(</span><span class="nv">$name</span> <span class="o">!=</span> <span class="s2">"Bob"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Continue to next route
+</span>        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/user/*'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// This will get called
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="route-info">Route Info</h2>
+
+<p>If you want to inspect the matching route information, you can request for the route
+object to be passed to your callback by passing in <code class="highlighter-rouge">true</code> as the third parameter in
+the route method. The route object will always be the last parameter passed to your
+callback function.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$route</span><span class="p">){</span>
+    <span class="c1">// Array of HTTP methods matched against
+</span>    <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">methods</span><span class="p">;</span>
+
+    <span class="c1">// Array of named parameters
+</span>    <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">params</span><span class="p">;</span>
+
+    <span class="c1">// Matching regular expression
+</span>    <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">regex</span><span class="p">;</span>
+
+    <span class="c1">// Contains the contents of any '*' used in the URL pattern
+</span>    <span class="nv">$route</span><span class="o">-&gt;</span><span class="na">splat</span><span class="p">;</span>
+<span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+        <a name="extending"></a>
+        
+
+<h1 id="extending">Extending</h1>
+
+<p>Flight is designed to be an extensible framework. The framework comes with a set
+of default methods and components, but it allows you to map your own methods,
+register your own classes, or even override existing classes and methods.</p>
+
+<h2 id="mapping-methods">Mapping Methods</h2>
+
+<p>To map your own custom method, you use the <code class="highlighter-rouge">map</code> function:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Map your method
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="s2">"hello </span><span class="nv">$name</span><span class="s2">!"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// Call your custom method
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">hello</span><span class="p">(</span><span class="s1">'Bob'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h2 id="registering-classes">Registering Classes</h2>
+
+<p>To register your own class, you use the <code class="highlighter-rouge">register</code> function:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Register your class
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'user'</span><span class="p">,</span> <span class="s1">'User'</span><span class="p">);</span>
+
+<span class="c1">// Get an instance of your class
+</span><span class="nv">$user</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">user</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>The register method also allows you to pass along parameters to your class
+constructor. So when you load your custom class, it will come pre-initialized.
+You can define the constructor parameters by passing in an additional array.
+Here’s an example of loading a database connection:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Register class with constructor parameters
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'PDO'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'mysql:host=localhost;dbname=test'</span><span class="p">,</span><span class="s1">'user'</span><span class="p">,</span><span class="s1">'pass'</span><span class="p">));</span>
+
+<span class="c1">// Get an instance of your class
+// This will create an object with the defined parameters
+//
+//     new PDO('mysql:host=localhost;dbname=test','user','pass');
+//
+</span><span class="nv">$db</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">db</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>If you pass in an additional callback parameter, it will be executed immediately
+after class construction. This allows you to perform any set up procedures for your
+new object. The callback function takes one parameter, an instance of the new object.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// The callback will be passed the object that was constructed
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'PDO'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'mysql:host=localhost;dbname=test'</span><span class="p">,</span><span class="s1">'user'</span><span class="p">,</span><span class="s1">'pass'</span><span class="p">),</span>
+  <span class="k">function</span><span class="p">(</span><span class="nv">$db</span><span class="p">){</span>
+    <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+</code></pre>
+</div>
+
+<p>By default, every time you load your class you will get a shared instance.
+To get a new instance of a class, simply pass in <code class="highlighter-rouge">false</code> as a parameter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Shared instance of the class
+</span><span class="nv">$shared</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">db</span><span class="p">();</span>
+
+<span class="c1">// New instance of the class
+</span><span class="nv">$new</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">db</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Keep in mind that mapped methods have precedence over registered classes. If you
+declare both using the same name, only the mapped method will be invoked.</p>
+
+
+        <a name="overriding"></a>
+        
+
+<h1 id="overriding">Overriding</h1>
+
+<p>Flight allows you to override its default functionality to suit your own needs,
+without having to modify any code.</p>
+
+<p>For example, when Flight cannot match a URL to a route, it invokes the <code class="highlighter-rouge">notFound</code>
+method which sends a generic <code class="highlighter-rouge">HTTP 404</code> response. You can override this behavior
+by using the <code class="highlighter-rouge">map</code> method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'notFound'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// Display custom 404 page
+</span>    <span class="k">include</span> <span class="s1">'errors/404.html'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Flight also allows you to replace core components of the framework.
+For example you can replace the default Router class with your own custom class:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Register your custom class
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'router'</span><span class="p">,</span> <span class="s1">'MyRouter'</span><span class="p">);</span>
+
+<span class="c1">// When Flight loads the Router instance, it will load your class
+</span><span class="nv">$myrouter</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">router</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>Framework methods like <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">register</code> however cannot be overridden. You will
+get an error if you try to do so.</p>
+
+
+        <a name="filtering"></a>
+        
+
+<h1 id="filtering">Filtering</h1>
+
+<p>Flight allows you to filter methods before and after they are called. There are no
+predefined hooks you need to memorize. You can filter any of the default framework
+methods as well as any custom methods that you’ve mapped.</p>
+
+<p>A filter function looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Filter code
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Using the passed in variables you can manipulate the input parameters and/or the output.</p>
+
+<p>You can have a filter run before a method by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="c1">// Do something
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<p>You can have a filter run after a method by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">after</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="c1">// Do something
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+<p>You can add as many filters as you want to any method. They will be called in the
+order that they are declared.</p>
+
+<p>Here’s an example of the filtering process:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Map a custom method
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$name</span><span class="p">){</span>
+    <span class="k">return</span> <span class="s2">"Hello, </span><span class="nv">$name</span><span class="s2">!"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// Add a before filter
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="c1">// Manipulate the parameter
+</span>    <span class="nv">$params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'Fred'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// Add an after filter
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">after</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="c1">// Manipulate the output
+</span>    <span class="nv">$output</span> <span class="o">.=</span> <span class="s2">" Have a nice day!"</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// Invoke the custom method
+</span><span class="k">echo</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">hello</span><span class="p">(</span><span class="s1">'Bob'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>This should display:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello Fred! Have a nice day!
+</code></pre>
+</div>
+
+<p>If you have defined multiple filters, you can break the chain by returning <code class="highlighter-rouge">false</code>
+in any of your filter functions:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="s1">'one'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="s1">'two'</span><span class="p">;</span>
+
+    <span class="c1">// This will end the chain
+</span>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// This will not get called
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="s1">'start'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">$params</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">){</span>
+    <span class="k">echo</span> <span class="s1">'three'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Note, core methods such as <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">register</code> cannot be filtered because they
+are called directly and not invoked dynamically.</p>
+
+
+        <a name="variables"></a>
+        
+
+<h1 id="variables">Variables</h1>
+
+<p>Flight allows you to save variables so that they can be used anywhere in your application.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Save your variable
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="mi">123</span><span class="p">);</span>
+
+<span class="c1">// Elsewhere in your application
+</span><span class="nv">$id</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">);</span>
+</code></pre>
+</div>
+<p>To see if a variable has been set you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">Flight</span><span class="o">::</span><span class="na">has</span><span class="p">(</span><span class="s1">'id'</span><span class="p">))</span> <span class="p">{</span>
+     <span class="c1">// Do something
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can clear a variable by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Clears the id variable
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">clear</span><span class="p">(</span><span class="s1">'id'</span><span class="p">);</span>
+
+<span class="c1">// Clears all variables
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">clear</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>Flight also uses variables for configuration purposes.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'flight.log_errors'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+        <a name="views"></a>
+        
+
+<h1 id="views">Views</h1>
+
+<p>Flight provides some basic templating functionality by default. To display a view
+template call the <code class="highlighter-rouge">render</code> method with the name of the template file and optional
+template data:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="s1">'hello.php'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="s1">'Bob'</span><span class="p">));</span>
+</code></pre>
+</div>
+
+<p>The template data you pass in is automatically injected into the template and can
+be reference like a local variable. Template files are simply PHP files. If the
+content of the <code class="highlighter-rouge">hello.php</code> template file is:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Hello</span><span class="p">,</span> <span class="s1">'&lt;?php echo $name; ?&gt;'</span><span class="o">!</span>
+</code></pre>
+</div>
+
+<p>The output would be:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Hello, Bob!
+</code></pre>
+</div>
+
+<p>You can also manually set view variables by using the set method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">view</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'Bob'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>The variable <code class="highlighter-rouge">name</code> is now available across all your views. So you can simply do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Note that when specifying the name of the template in the render method, you can
+leave out the <code class="highlighter-rouge">.php</code> extension.</p>
+
+<p>By default Flight will look for a <code class="highlighter-rouge">views</code> directory for template files. You can
+set an alternate path for your templates by setting the following config:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'flight.views.path'</span><span class="p">,</span> <span class="s1">'/path/to/views'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h2 id="layouts">Layouts</h2>
+
+<p>It is common for websites to have a single layout template file with interchanging
+content. To render content to be used in a layout, you can pass in an optional
+parameter to the <code class="highlighter-rouge">render</code> method.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="s1">'header'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'heading'</span> <span class="o">=&gt;</span> <span class="s1">'Hello'</span><span class="p">),</span> <span class="s1">'header_content'</span><span class="p">);</span>
+<span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="s1">'body'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'body'</span> <span class="o">=&gt;</span> <span class="s1">'World'</span><span class="p">),</span> <span class="s1">'body_content'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Your view will then have saved variables called <code class="highlighter-rouge">header_content</code> and <code class="highlighter-rouge">body_content</code>.
+You can then render your layout by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="s1">'layout'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="s1">'Home Page'</span><span class="p">));</span>
+</code></pre>
+</div>
+
+<p>If the template files looks like this:</p>
+
+<p><code class="highlighter-rouge">header.php</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$heading</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="nt">&lt;/h1&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">body.php</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$body</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">layout.php</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">html</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">head</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">title</span><span class="o">&gt;&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$title</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$header_content</span><span class="p">;</span> <span class="cp">?&gt;</span>
+<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$body_content</span><span class="p">;</span> <span class="cp">?&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+<p>The output would be:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Home Page<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Hello<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div&gt;</span>World<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="custom-views">Custom Views</h2>
+
+<p>Flight allows you to swap out the default view engine simply by registering your
+own view class. Here’s how you would use the <a href="http://www.smarty.net/">Smarty</a>
+template engine for your views:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Load Smarty library
+</span><span class="k">require</span> <span class="s1">'./Smarty/libs/Smarty.class.php'</span><span class="p">;</span>
+
+<span class="c1">// Register Smarty as the view class
+// Also pass a callback function to configure Smarty on load
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="s1">'view'</span><span class="p">,</span> <span class="s1">'Smarty'</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="k">function</span><span class="p">(</span><span class="nv">$smarty</span><span class="p">){</span>
+    <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">template_dir</span> <span class="o">=</span> <span class="s1">'./templates/'</span><span class="p">;</span>
+    <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">compile_dir</span> <span class="o">=</span> <span class="s1">'./templates_c/'</span><span class="p">;</span>
+    <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">config_dir</span> <span class="o">=</span> <span class="s1">'./config/'</span><span class="p">;</span>
+    <span class="nv">$smarty</span><span class="o">-&gt;</span><span class="na">cache_dir</span> <span class="o">=</span> <span class="s1">'./cache/'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// Assign template data
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">view</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">assign</span><span class="p">(</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'Bob'</span><span class="p">);</span>
+
+<span class="c1">// Display the template
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">view</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="s1">'hello.tpl'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>For completeness, you should also override Flight’s default render method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'render'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$template</span><span class="p">,</span> <span class="nv">$data</span><span class="p">){</span>
+    <span class="nx">Flight</span><span class="o">::</span><span class="na">view</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">assign</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="nx">Flight</span><span class="o">::</span><span class="na">view</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">display</span><span class="p">(</span><span class="nv">$template</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+
+        <a name="variables"></a>
+        
+
+<h1 id="variables">Variables</h1>
+
+<p>Flight allows you to save variables so that they can be used anywhere in your application.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Save your variable
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="mi">123</span><span class="p">);</span>
+
+<span class="c1">// Elsewhere in your application
+</span><span class="nv">$id</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">);</span>
+</code></pre>
+</div>
+<p>To see if a variable has been set you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">Flight</span><span class="o">::</span><span class="na">has</span><span class="p">(</span><span class="s1">'id'</span><span class="p">))</span> <span class="p">{</span>
+     <span class="c1">// Do something
+</span><span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can clear a variable by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Clears the id variable
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">clear</span><span class="p">(</span><span class="s1">'id'</span><span class="p">);</span>
+
+<span class="c1">// Clears all variables
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">clear</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>Flight also uses variables for configuration purposes.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'flight.log_errors'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+        <a name="errorhandling"></a>
+        
+
+<h1 id="error-handling">Error Handling</h1>
+
+<h2 id="errors-and-exceptions">Errors and Exceptions</h2>
+
+<p>All errors and exceptions are caught by Flight and passed to the <code class="highlighter-rouge">error</code> method.
+The default behavior is to send a generic <code class="highlighter-rouge">HTTP 500 Internal Server Error</code>
+response with some error information.</p>
+
+<p>You can override this behavior for your own needs:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nx">Exception</span> <span class="nv">$ex</span><span class="p">){</span>
+    <span class="c1">// Handle error
+</span>    <span class="k">echo</span> <span class="nv">$ex</span><span class="o">-&gt;</span><span class="na">getTraceAsString</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>By default errors are not logged to the web server. You can enable this by
+changing the config:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'flight.log_errors'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h2 id="not-found">Not Found</h2>
+
+<p>When a URL can’t be found, Flight calls the <code class="highlighter-rouge">notFound</code> method. The default
+behavior is to send an <code class="highlighter-rouge">HTTP 404 Not Found</code> response with a simple message.</p>
+
+<p>You can override this behavior for your own needs:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="s1">'notFound'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="c1">// Handle not found
+</span><span class="p">});</span>
+</code></pre>
+</div>
+
+
+        <a name="redirects"></a>
+        
+
+
+<h1 id="redirects">Redirects</h1>
+
+<p>You can redirect the current request by using the <code class="highlighter-rouge">redirect</code> method and passing
+in a new URL:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">redirect</span><span class="p">(</span><span class="s1">'/new/location'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>By default Flight sends a HTTP 303 status code. You can optionally set a
+custom code:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">redirect</span><span class="p">(</span><span class="s1">'/new/location'</span><span class="p">,</span> <span class="mi">401</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+        <a name="requests"></a>
+        
+
+<h1 id="requests">Requests</h1>
+
+<p>Flight encapsulates the HTTP request into a single object, which can be
+accessed by doing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">$request</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">request</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>The request object provides the following properties:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>url - The URL being requested
+base - The parent subdirectory of the URL
+method - The request method (GET, POST, PUT, DELETE)
+referrer - The referrer URL
+ip - IP address of the client
+ajax - Whether the request is an AJAX request
+scheme - The server protocol (http, https)
+user_agent - Browser information
+type - The content type
+length - The content length
+query - Query string parameters
+data - Post data or JSON data
+cookies - Cookie data
+files - Uploaded files
+secure - Whether the connection is secure
+accept - HTTP accept parameters
+proxy_ip - Proxy IP address of the client
+</code></pre>
+</div>
+
+<p>You can access the <code class="highlighter-rouge">query</code>, <code class="highlighter-rouge">data</code>, <code class="highlighter-rouge">cookies</code>, and <code class="highlighter-rouge">files</code> properties
+as arrays or objects.</p>
+
+<p>So, to get a query string parameter, you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">$id</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">[</span><span class="s1">'id'</span><span class="p">];</span>
+</code></pre>
+</div>
+
+<p>Or you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">$id</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">query</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<h2 id="raw-request-body">RAW Request Body</h2>
+
+<p>To get the raw HTTP request body, for example when dealing with PUT requests, you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">$body</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getBody</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<h2 id="json-input">JSON Input</h2>
+
+<p>If you send a request with the type <code class="highlighter-rouge">application/json</code> and the data <code class="highlighter-rouge"><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">}</span></code> it will be available
+from the <code class="highlighter-rouge">data</code> property:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">$id</span> <span class="o">=</span> <span class="nx">Flight</span><span class="o">::</span><span class="na">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">data</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+        <a name="stopping"></a>
+        
+
+<h1 id="stopping">Stopping</h1>
+
+<p>You can stop the framework at any point by calling the <code class="highlighter-rouge">halt</code> method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">halt</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>You can also specify an optional <code class="highlighter-rouge">HTTP</code> status code and message:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">halt</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s1">'Be right back...'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Calling <code class="highlighter-rouge">halt</code> will discard any response content up to that point. If you want to stop
+the framework and output the current response, use the <code class="highlighter-rouge">stop</code> method:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">stop</span><span class="p">();</span>
+</code></pre>
+</div>
+
+
+        <a name="httpcaching"></a>
+        
+
+<h1 id="http-caching">HTTP Caching</h1>
+
+<p>Flight provides built-in support for HTTP level caching. If the caching condition
+is met, Flight will return an HTTP <code class="highlighter-rouge">304 Not Modified</code> response. The next time the
+client requests the same resource, they will be prompted to use their locally
+cached version.</p>
+
+<h2 id="last-modified">Last-Modified</h2>
+
+<p>You can use the <code class="highlighter-rouge">lastModified</code> method and pass in a UNIX timestamp to set the date
+and time a page was last modified. The client will continue to use their cache until
+the last modified value is changed.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/news'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="nx">Flight</span><span class="o">::</span><span class="na">lastModified</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="s1">'This content will be cached.'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="etag">ETag</h2>
+
+<p><code class="highlighter-rouge">ETag</code> caching is similar to <code class="highlighter-rouge">Last-Modified</code>, except you can specify any id you
+want for the resource:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/news'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="nx">Flight</span><span class="o">::</span><span class="na">etag</span><span class="p">(</span><span class="s1">'my-unique-id'</span><span class="p">);</span>
+    <span class="k">echo</span> <span class="s1">'This content will be cached.'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Keep in mind that calling either <code class="highlighter-rouge">lastModified</code> or <code class="highlighter-rouge">etag</code> will both set and check the
+cache value. If the cache value is the same between requests, Flight will immediately
+send an <code class="highlighter-rouge">HTTP 304</code> response and stop processing.</p>
+
+
+        <a name="json"></a>
+        
+
+<h1 id="json">JSON</h1>
+
+<p>Flight provides support for sending JSON and JSONP responses. To send a JSON response you
+pass some data to be JSON encoded:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">json</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="mi">123</span><span class="p">));</span>
+</code></pre>
+</div>
+
+<p>For JSONP requests you, can optionally pass in the query parameter name you are
+using to define your callback function:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">jsonp</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="mi">123</span><span class="p">),</span> <span class="s1">'q'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>So, when making a GET request using <code class="highlighter-rouge">?q=my_func</code>, you should receive the output:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>my_func({"id":123});
+</code></pre>
+</div>
+
+<p>If you don’t pass in a query parameter name it will default to <code class="highlighter-rouge">jsonp</code>.</p>
+
+
+        <a name="configuration"></a>
+        
+
+<h1 id="configuration">Configuration</h1>
+
+<p>You can customize certain behaviors of Flight by setting configuration values
+through the <code class="highlighter-rouge">set</code> method.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">'flight.log_errors'</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>The following is a list of all the available configuration settings:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>flight.base_url - Override the base url of the request. (default: null)
+flight.case_sensitive - Case sensitive matching for URLs. (default: false)
+flight.handle_errors - Allow Flight to handle all errors internally. (default: true)
+flight.log_errors - Log errors to the web server's error log file. (default: false)
+flight.views.path - Directory containing view template files. (default: ./views)
+flight.views.extension - View template file extension. (default: .php)
+</code></pre>
+</div>
+
+
+        <a name="frameworkmethods"></a>
+        
+
+<h1 id="framework-methods">Framework Methods</h1>
+
+<p>Flight is designed to be easy to use and understand. The following is the complete
+set of methods for the framework. It consists of core methods, which are regular
+static methods, and extensible methods, which are mapped methods that can be filtered
+or overridden.</p>
+
+<h2 id="core-methods">Core Methods</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">map</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$callback</span><span class="p">)</span> <span class="c1">// Creates a custom framework method.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">register</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$class</span><span class="p">,</span> <span class="p">[</span><span class="nv">$params</span><span class="p">],</span> <span class="p">[</span><span class="nv">$callback</span><span class="p">])</span> <span class="c1">// Registers a class to a framework method.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">before</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$callback</span><span class="p">)</span> <span class="c1">// Adds a filter before a framework method.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">after</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$callback</span><span class="p">)</span> <span class="c1">// Adds a filter after a framework method.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">path</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span> <span class="c1">// Adds a path for autoloading classes.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="nv">$key</span><span class="p">)</span> <span class="c1">// Gets a variable.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">)</span> <span class="c1">// Sets a variable.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">has</span><span class="p">(</span><span class="nv">$key</span><span class="p">)</span> <span class="c1">// Checks if a variable is set.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">clear</span><span class="p">([</span><span class="nv">$key</span><span class="p">])</span> <span class="c1">// Clears a variable.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">init</span><span class="p">()</span> <span class="c1">// Initializes the framework to its default settings.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">app</span><span class="p">()</span> <span class="c1">// Gets the application object instance
+</span></code></pre>
+</div>
+
+<h2 id="extensible-methods">Extensible Methods</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">start</span><span class="p">()</span> <span class="c1">// Starts the framework.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">stop</span><span class="p">()</span> <span class="c1">// Stops the framework and sends a response.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">halt</span><span class="p">([</span><span class="nv">$code</span><span class="p">],</span> <span class="p">[</span><span class="nv">$message</span><span class="p">])</span> <span class="c1">// Stop the framework with an optional status code and message.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$callback</span><span class="p">)</span> <span class="c1">// Maps a URL pattern to a callback.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">redirect</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="p">[</span><span class="nv">$code</span><span class="p">])</span> <span class="c1">// Redirects to another URL.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">render</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="p">[</span><span class="nv">$data</span><span class="p">],</span> <span class="p">[</span><span class="nv">$key</span><span class="p">])</span> <span class="c1">// Renders a template file.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">error</span><span class="p">(</span><span class="nv">$exception</span><span class="p">)</span> <span class="c1">// Sends an HTTP 500 response.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">notFound</span><span class="p">()</span> <span class="c1">// Sends an HTTP 404 response.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">etag</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="p">[</span><span class="nv">$type</span><span class="p">])</span> <span class="c1">// Performs ETag HTTP caching.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">lastModified</span><span class="p">(</span><span class="nv">$time</span><span class="p">)</span> <span class="c1">// Performs last modified HTTP caching.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">json</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="p">[</span><span class="nv">$code</span><span class="p">],</span> <span class="p">[</span><span class="nv">$encode</span><span class="p">])</span> <span class="c1">// Sends a JSON response.
+</span><span class="nx">Flight</span><span class="o">::</span><span class="na">jsonp</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="p">[</span><span class="nv">$param</span><span class="p">],</span> <span class="p">[</span><span class="nv">$code</span><span class="p">],</span> <span class="p">[</span><span class="nv">$encode</span><span class="p">])</span> <span class="c1">// Sends a JSONP response.
+</span></code></pre>
+</div>
+
+<p>Any custom methods added with <code class="highlighter-rouge">map</code> and <code class="highlighter-rouge">register</code> can also be filtered.</p>
+
+
+        <a name="frameworkinstance"></a>
+        
+
+<h1 id="framework-instance">Framework Instance</h1>
+
+<p>Instead of running Flight as a global static class, you can optionally run it
+as an object instance.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">require</span> <span class="s1">'flight/autoload.php'</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="nx">flight\Engine</span><span class="p">;</span>
+
+<span class="nv">$app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Engine</span><span class="p">();</span>
+
+<span class="nv">$app</span><span class="o">-&gt;</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nv">$app</span><span class="o">-&gt;</span><span class="na">start</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>So instead of calling the static method, you would call the instance method with
+the same name on the Engine object.</p>
+
+    </div>
+</div>
+    </div>
+    <div id="footer">
+    <div>
+        
+
+<p>Copyright © Mike Cao and other flightphp.com contributors</p>
+
+<p><a href="https://github.com/mikecao/flightphp.com">Fork this website on GitHub</a></p>
+
+    </div>
+    <a class="github-button" href="https://github.com/mikecao/flight" data-count-href="/mikecao/flight/stargazers" data-count-api="/repos/mikecao/flight#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star mikecao/flight on GitHub">Star</a>
+    <a class="github-button" href="https://github.com/mikecao/flight/fork" data-count-href="/mikecao/flight/network" data-count-api="/repos/mikecao/flight#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork mikecao/flight on GitHub">Fork</a>
+</div>
+
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-101933-10']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+  </div>
+</body>
+</html>

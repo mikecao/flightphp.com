@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flight - An extensible micro-framework for PHP</title>
+  <link href='http://fonts.googleapis.com/css?family=Mr+Dafoe' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png" />
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/highlight.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/jquery-1.12.3.min.js"></script>
+  <script src="/assets/js/main.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+  <div id="title">Flight</div>
+  <div id="subtitle">
+    
+
+<p>An extensible micro-framework for PHP</p>
+
+  </div>
+  <div id="nav">
+    
+
+<p><a href="/en/">about</a>
+<a href="/en/install">install</a>
+<a href="/en/learn">learn</a>
+<a href="https://github.com/mikecao/flight">code</a></p>
+
+  </div>
+</div>
+
+    <div id="content">
+        
+
+<h1 id="installation">Installation</h1>
+
+<h3 id="download-the-files">1. Download the files.</h3>
+
+<p>If you’re using <a href="https://getcomposer.org/">Composer</a>, you can run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>composer require mikecao/flight
+</code></pre>
+</div>
+
+<p>OR you can <a href="https://github.com/mikecao/flight/archive/master.zip">download</a> them directly and extract them to your web directory.</p>
+
+<h3 id="configure-your-webserver">2. Configure your webserver.</h3>
+
+<p>For <em>Apache</em>, edit your <code class="highlighter-rouge">.htaccess</code> file with the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nl">RewriteEngine</span> On
+<span class="nl">RewriteCond</span> %{REQUEST_FILENAME} !-f
+<span class="nl">RewriteCond</span> %{REQUEST_FILENAME} !-d
+<span class="nl">RewriteRule</span> ^(.*)$ index.php [QSA,L]
+</code></pre>
+</div>
+
+<p>For <em>Nginx</em>, add the following to your server declaration:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
+        <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="nv">$uri</span><span class="n">/</span> <span class="n">/index.php</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="create-your-indexphp-file">3. Create your <code class="highlighter-rouge">index.php</code> file.</h3>
+
+<p>First include the framework.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">require</span> <span class="s1">'flight/Flight.php'</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>If you’re using Composer, run the autoloader instead.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">require</span> <span class="s1">'vendor/autoload.php'</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>Then define a route and assign a function to handle the request.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Finally, start the framework.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Flight::start();
+</code></pre>
+</div>
+
+    </div>
+    <div id="footer">
+    <div>
+        
+
+<p>Copyright © Mike Cao and other flightphp.com contributors</p>
+
+<p><a href="https://github.com/mikecao/flightphp.com">Fork this website on GitHub</a></p>
+
+    </div>
+    <a class="github-button" href="https://github.com/mikecao/flight" data-count-href="/mikecao/flight/stargazers" data-count-api="/repos/mikecao/flight#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star mikecao/flight on GitHub">Star</a>
+    <a class="github-button" href="https://github.com/mikecao/flight/fork" data-count-href="/mikecao/flight/network" data-count-api="/repos/mikecao/flight#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork mikecao/flight on GitHub">Fork</a>
+</div>
+
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-101933-10']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+  </div>
+</body>
+</html>

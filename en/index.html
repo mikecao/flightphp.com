@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flight - An extensible micro-framework for PHP</title>
+  <link href='http://fonts.googleapis.com/css?family=Mr+Dafoe' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png" />
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/highlight.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/jquery-1.12.3.min.js"></script>
+  <script src="/assets/js/main.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+  <div id="title">Flight</div>
+  <div id="subtitle">
+    
+
+<p>An extensible micro-framework for PHP</p>
+
+  </div>
+  <div id="nav">
+    
+
+<p><a href="/en/">about</a>
+<a href="/en/install">install</a>
+<a href="/en/learn">learn</a>
+<a href="https://github.com/mikecao/flight">code</a></p>
+
+  </div>
+</div>
+
+    <div id="content">
+        
+
+<h1 id="what-is-flight">What is Flight?</h1>
+
+<p>Flight is a fast, simple, extensible framework for PHP.
+Flight enables you to quickly and easily build RESTful web applications.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">require</span> <span class="s1">'flight/Flight.php'</span><span class="p">;</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+  <span class="k">echo</span> <span class="s1">'hello world!'</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="nx">Flight</span><span class="o">::</span><span class="na">start</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p><a href="/en/learn">Learn more</a></p>
+
+<h1 id="requirements">Requirements</h1>
+
+<p>Flight requires PHP 5.3 or greater.</p>
+
+<h1 id="license">License</h1>
+
+<p>Flight is released under the <a href="https://github.com/mikecao/flight/blob/master/LICENSE">MIT</a> license.</p>
+
+    </div>
+    <div id="footer">
+    <div>
+        
+
+<p>Copyright © Mike Cao and other flightphp.com contributors</p>
+
+<p><a href="https://github.com/mikecao/flightphp.com">Fork this website on GitHub</a></p>
+
+    </div>
+    <a class="github-button" href="https://github.com/mikecao/flight" data-count-href="/mikecao/flight/stargazers" data-count-api="/repos/mikecao/flight#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star mikecao/flight on GitHub">Star</a>
+    <a class="github-button" href="https://github.com/mikecao/flight/fork" data-count-href="/mikecao/flight/network" data-count-api="/repos/mikecao/flight#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork mikecao/flight on GitHub">Fork</a>
+</div>
+
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-101933-10']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+  </div>
+</body>
+</html>
