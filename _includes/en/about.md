@@ -22,3 +22,8 @@ Flight requires PHP 5.3 or greater.
 # License
 
 Flight is released under the [MIT](https://github.com/mikecao/flight/blob/master/LICENSE) license.
+
+# Contributing
+
+This website is hosted on [Github](https://github.com/mikecao/flightphp.com).
+Updates and language translations are welcome.
