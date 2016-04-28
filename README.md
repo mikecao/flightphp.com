@@ -19,19 +19,19 @@ code as the name. There should be an existing `en` folder for English.
 
 2. Copy the contents of the `en` folder to your new folder. For example from `en` into `fr`.
 
-3. In each of the `.html` files, there is a `lang` setting at the top. Change the value to your language code. For example:
+3. In each of the `.html` files, there is a `lang` setting at the top. Change the value to your language code.
 
     ``` yaml
     layout: default
     lang: fr
     ```
 
-4. In the `_includes` folder, create a folder with your language code as the name.
-There should already be an existing `_includes/en` folder for English.
+4. Create a new folder in the `_includes` folder with your language code.
+There should be an existing `_includes/en` folder for English.
 
-5. Copy all the `.md` files from the `en` directory into your new `_includes` directory.
+5. Copy the contents of the `_includes/en` folder into your new folder. For example from `_includes/en` into `_includes/fr`.
 
-6. Translate all the `.md` files directly.
+6. Translate all the `.md` files. These files use the [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/) syntax.
 
 7. Run the website through Jekyll, `jekyll serve --watch`.
 
