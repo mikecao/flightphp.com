@@ -15,4 +15,5 @@ kramdown:
   syntax_highlighter: rouge
   hard_wrap: false
 
-exclude: ['README.markdown', 'Gemfile.lock', 'Gemfile']
+exclude: ['README.markdown', 'Gemfile.lock', 'Gemfile', '.gitignore']
+keep_files: ['.git']
