@@ -1,4 +1,4 @@
-[about](/)
-[install](install)
-[learn](learn)
+[about]({{site.baseurl}}/)
+[install]({{site.baseurl}}/install)
+[learn]({{site.baseurl}}/learn)
 [code](https://github.com/mikecao/flight)

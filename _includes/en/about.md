@@ -13,7 +13,7 @@ Flight::route('/', function(){
 Flight::start();
 ```
 
-[Learn more](./learn)
+[Learn more]({{site.baseurl}}/learn)
 
 # Requirements
 

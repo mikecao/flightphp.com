@@ -2,7 +2,7 @@
 name: Flight
 title: Flight - An extensible micro-framework for PHP
 email: mike@mikecao.com
-baseurl: ""
+baseurl: "/flightphp.com"
 url: "http://flightphp.com"
 
 # Build settings
