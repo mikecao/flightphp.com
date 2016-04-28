@@ -14,21 +14,25 @@ since that will only contain the compiled html from Jekyll.
 
 If you would like to translate the website into another language, follow these steps:
 
-1. Create a new directory at the root level with the proper [ISO 639-1](http://www.loc.gov/standards/iso639-2/php/code_list.php)
-code as the name. For example, `fr` for French.
+1. Create a new folder at the root level with the proper [ISO 639-1](http://www.loc.gov/standards/iso639-2/php/code_list.php)
+code as the name. There should be an existing `en` folder for English.
 
-2. Copy the `index.html`, `install.html`, and `learn.html` files from the root into your language new directory.
+2. Copy the contents of the `en` folder to your new folder. For example from `en` into `fr`.
 
-3. Change the `lang` setting at the top of each file to your language code. For example:
+3. In each of the `.html` files, there is a `lang` setting at the top. Change the value to your language code. For example:
 
-``` yaml
-layout: default
-lang: fr
-```
+    ``` yaml
+    layout: default
+    lang: fr
+    ```
 
 4. In the `_includes` folder, create a folder with your language code as the name.
-There should already be an existing `en` folder for English.
+There should already be an existing `_includes/en` folder for English.
 
-5. Copy all the `.md` files from the `en` directory into your new directory.
+5. Copy all the `.md` files from the `en` directory into your new `_includes` directory.
 
 6. Translate all the `.md` files directly.
+
+7. Run the website through Jekyll, `jekyll serve --watch`.
+
+8. Change the url to your language, `http://localhost:4000/fr/`.
