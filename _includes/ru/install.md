@@ -45,7 +45,7 @@ require 'flight/Flight.php';
 require 'vendor/autoload.php';
 ```
 
-Определите путь и опишите функцию обработки запроса.
+Определите маршрут и опишите функцию обработки запроса.
 
 ``` php?start_inline=1
 Flight::route('/', function(){
