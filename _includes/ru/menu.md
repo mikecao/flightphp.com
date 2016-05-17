@@ -1,7 +1,7 @@
 - [Маршрутизация](#routing)
 - [Расширяемость](#extending)
 - [Переопределение](#overriding)
-- [Фильтрация](#filtering)
+- [Фильтры](#filtering)
 - [Переменные](#variables)
 - [Представления](#views)
 - [Обработка ошибок](#errorhandling)

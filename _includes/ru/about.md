@@ -1,7 +1,7 @@
 # Что такое Flight?
 
-Flight это быстрый, простой, расширяемый фреймворк для PHP.
-Flight позовляет вам быстро строить веб-приложения с использованиемы REST.
+Flight это простой, расширяемый и быстрый фреймворк для PHP.
+Flight позовляет вам быстро и легко создавать REST веб-приложения.
 
 ``` php?start_inline=1
 require 'flight/Flight.php';
@@ -23,7 +23,7 @@ Flight требует PHP 5.3 или выше.
 
 Flight выпущен под лицензией [MIT](https://github.com/mikecao/flight/blob/master/LICENSE).
 
-# Внести свой вклад
+# Помощь в развитии
 
 Исходный код этого веб-сайта доступен на [Github](https://github.com/mikecao/flightphp.com).
 Обновления и переводы приветствуются.
