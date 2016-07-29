@@ -1,7 +1,6 @@
 # flightphp.com
 
 This is the repository of the website [flightphp.com](http://flightphp.com).
-It is hosted directly from the repository as a [GitHub Pages](https://pages.github.com/) website.
 The website built with the program [Jekyll](https://jekyllrb.com/).
 
 ## Contributing
