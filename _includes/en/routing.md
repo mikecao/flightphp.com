@@ -157,3 +157,15 @@ Flight::route('/', function($route){
     $route->splat;
 }, true);
 ```
+
+## Cross-Origin Resource Sharing (CORS)
+
+If you want to make cross-origin requests within a browser context, you will need to
+define an OPTIONS method route to handle the browser pre-flight request which checks
+for Access-Control-Allow-Origin and Access-Control-Request-Method response headers.
+
+``` php?start_inline=1
+Flight::route('OPTIONS /', function(){
+    // It's a good idea to return the same data type (flat html, json, xml, etc) here
+});
+```
