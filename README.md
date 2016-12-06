@@ -1,7 +1,7 @@
 # flightphp.com
 
 This is the repository of the website [flightphp.com](http://flightphp.com).
-The website built with the program [Jekyll](https://jekyllrb.com/).
+The website is built with the program [Jekyll](https://jekyllrb.com/).
 
 ## Contributing
 
