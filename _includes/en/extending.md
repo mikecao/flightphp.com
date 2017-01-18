@@ -29,6 +29,8 @@ Flight::register('user', 'User');
 // Get an instance of your class
 $user = Flight::user();
 ```
+Note: Registration of classes with Flight requires the fully qualified class name.
+
 
 The register method also allows you to pass along parameters to your class
 constructor. So when you load your custom class, it will come pre-initialized.
