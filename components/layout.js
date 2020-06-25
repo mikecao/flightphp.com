@@ -17,6 +17,7 @@ export default function Layout({ children }) {
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-101933-10"></script>
         <script dangerouslySetInnerHTML={{__html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-101933-10');`}}>
         </script>
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
       <div id="container">
         <Header />

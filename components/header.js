@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 
 export default function Header() {
   return (
@@ -9,19 +8,13 @@ export default function Header() {
       <nav>
         <ul>
           <li>
-            <Link href="/">
-              <a>about</a>
-            </Link>
+            <a href="/">about</a>
           </li>
           <li>
-            <Link href="/install">
-              <a>install</a>
-            </Link>
+            <a href="/install">install</a>
           </li>
           <li>
-            <Link href="/learn">
-              <a>learn</a>
-            </Link>
+            <a href="/learn">learn</a>
           </li>
           <li>
             <a href="https://github.com/mikecao/flight">code</a>

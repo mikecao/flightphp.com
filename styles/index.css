@@ -85,6 +85,14 @@ ul {
   text-align: center;
 }
 
+#footer .buttons {
+  margin: 20px;
+}
+
+#footer .buttons > * {
+  margin: 05px;
+}
+
 #learn .menu {
   position: sticky;
   top: 20px;
