@@ -1,7 +1,0 @@
-{% if include.lang == '.' %}
-    {% assign lang = 'en' %}
-{% else %}
-    {% assign lang = include.lang %}
-{% endif %}
-{% capture markdownContent %}{% include {{lang | append: '/' | append: include.page}} %}{% endcapture %}
-{{ markdownContent | markdownify }}
