@@ -33,11 +33,11 @@ export default function Learn({ content }) {
 }
 
 export async function getStaticProps() {
-  const content = await getMarkdownContent();
+  const { about, install, ...rest } = await getMarkdownContent();
 
   return {
     props: {
-      content,
+      content: { ...rest },
     },
   };
 }

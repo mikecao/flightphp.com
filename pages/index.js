@@ -6,7 +6,7 @@ import { getMarkdownContent } from 'lib/content';
 export default function Home({ content }) {
   return (
     <Layout>
-      <Html>{content.about}</Html>
+      <Html>{content}</Html>
     </Layout>
   );
 }
@@ -16,7 +16,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      content,
+      content: content.about,
     },
   };
 }

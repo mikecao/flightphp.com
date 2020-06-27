@@ -6,7 +6,7 @@ import { getMarkdownContent } from 'lib/content';
 export default function Install({ content }) {
   return (
     <Layout>
-      <Html>{content.install}</Html>
+      <Html>{content}</Html>
     </Layout>
   );
 }
@@ -16,7 +16,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      content,
+      content: content.install,
     },
   };
 }
