@@ -18,7 +18,9 @@ Hello, '<?php echo $name; ?>'!
 
 The output would be:
 
-    Hello, Bob!
+``` html
+Hello, Bob!
+```
 
 You can also manually set view variables by using the set method:
 

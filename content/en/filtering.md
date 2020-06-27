@@ -59,7 +59,9 @@ echo Flight::hello('Bob');
 
 This should display:
 
-    Hello Fred! Have a nice day!
+``` html
+Hello Fred! Have a nice day!
+```
 
 If you have defined multiple filters, you can break the chain by returning `false`
 in any of your filter functions:
