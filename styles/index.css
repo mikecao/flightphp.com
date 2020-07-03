@@ -8,12 +8,21 @@ body {
   margin: 0;
   box-sizing: border-box;
   background: #f3f3f3;
+  width: 100%;
 }
 
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+  -webkit-font-smoothing: antialiased;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
 }
 
 #container {

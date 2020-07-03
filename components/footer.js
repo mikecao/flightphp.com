@@ -5,7 +5,7 @@ export default function Footer() {
     <footer id="footer">
       <div className="buttons">
         <a
-          class="github-button"
+          className="github-button"
           href="https://github.com/mikecao/flight"
           data-icon="octicon-star"
           data-size="large"
@@ -16,7 +16,7 @@ export default function Footer() {
         </a>
 
         <a
-          class="github-button"
+          className="github-button"
           href="https://github.com/mikecao/flight/fork"
           data-icon="octicon-repo-forked"
           data-size="large"
