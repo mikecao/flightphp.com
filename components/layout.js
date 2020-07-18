@@ -13,12 +13,14 @@ export default function Layout({ children }) {
           rel="stylesheet"
         />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-101933-10"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-101933-10');`,
-          }}
-        ></script>
+        {typeof window !== 'undefined' && (
+          <script
+            async
+            defer
+            data-website-id="89188287-2ec0-4b91-9ab4-a5249e93a6b5"
+            src="https://umami.is/umami.js"
+          />
+        )}
         <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
       <div id="container">
