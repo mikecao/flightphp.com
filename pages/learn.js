@@ -1,16 +1,19 @@
 import React from 'react';
 import Layout from 'components/layout';
 import Html from 'components/html';
+import Sticky from 'components/sticky';
 import { getMarkdownContent } from 'lib/content';
 
 export default function Learn({ content }) {
   return (
     <Layout>
-      <section id="learn">
-        <div className="menu">
-          <Html>{content.menu}</Html>
+      <section id="learn" className="row">
+        <div className="menu col-12 col-md-3 col-lg-2">
+          <Sticky className="sticky">
+            <Html>{content.menu}</Html>
+          </Sticky>
         </div>
-        <div className="content">
+        <div className="content col-12 col-md-9 col-lg-10">
           <Html>{content.routing}</Html>
           <Html>{content.extending}</Html>
           <Html>{content.overriding}</Html>

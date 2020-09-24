@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function Header() {
   return (
-    <header id="header">
-      <div className="title">Flight</div>
-      <div className="subtitle">An extensible micro-framework for PHP</div>
-      <nav>
+    <header id="header" className="row justify-content-center">
+      <div className="title col-12">Flight</div>
+      <div className="subtitle col-12">An extensible micro-framework for PHP</div>
+      <nav id="nav" className="col-10 col-md-4">
         <ul>
           <li>
             <a href="/">about</a>

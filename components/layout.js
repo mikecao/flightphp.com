@@ -9,7 +9,7 @@ export default function Layout({ children }) {
       <Head>
         <title>Flight - An extensible micro-framework for PHP</title>
         <link
-          href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&family=Open+Sans&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&family=Inter:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
         <link rel="icon" type="image/png" href="/favicon.png" />
@@ -23,7 +23,7 @@ export default function Layout({ children }) {
         )}
         <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
-      <div id="container">
+      <div id="container" className="container">
         <Header />
         <main role="main">{children}</main>
         <Footer />
