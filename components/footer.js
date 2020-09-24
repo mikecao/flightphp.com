@@ -26,7 +26,7 @@ export default function Footer() {
           Fork
         </a>
       </div>
-      <div>Copyright © Mike Cao and other flightphp.com contributors</div>
+      <div>Copyright © Mike Cao</div>
     </footer>
   );
 }
