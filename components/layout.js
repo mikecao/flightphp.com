@@ -13,7 +13,7 @@ export default function Layout({ children }) {
           rel="stylesheet"
         />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        {typeof window !== 'undefined' && (
+        {typeof window !== 'undefined' && process.env.NODE_ENV === 'production' && (
           <script
             async
             defer
