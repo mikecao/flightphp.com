@@ -18,7 +18,7 @@ export default function Layout({ children }) {
             async
             defer
             data-website-id="89188287-2ec0-4b91-9ab4-a5249e93a6b5"
-            src="https://app.umami.is/umami.js"
+            src="https://app.umami.is/script.js"
           />
         )}
         <script async defer src="https://buttons.github.io/buttons.js"></script>
