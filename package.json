@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider next dev -p 8080",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
     "@mapbox/rehype-prism": "^0.5.0",
+    "mixpanel-browser": "^2.47.0",
     "next": "9.4.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -17,6 +18,7 @@
     "remark-html": "^11.0.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
