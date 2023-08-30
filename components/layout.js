@@ -17,7 +17,7 @@ export default function Layout({ children }) {
           <script
             async
             defer
-            src="http://umami.mikecao.com/script.js"
+            src="https://flightphp.com/stats/script.js"
             data-website-id="89188287-2ec0-4b91-9ab4-a5249e93a6b5"
           ></script>
         )}
