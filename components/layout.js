@@ -14,7 +14,12 @@ export default function Layout({ children }) {
         />
         <link rel="icon" type="image/png" href="/favicon.png" />
         {typeof window !== 'undefined' && process.env.NODE_ENV === 'production' && (
-          <script async defer src="https://app.umami.is/script.js" data-website-id="89188287-2ec0-4b91-9ab4-a5249e93a6b5"></script>
+          <script
+            async
+            defer
+            src="http://umami.mikecao.com/script.js"
+            data-website-id="89188287-2ec0-4b91-9ab4-a5249e93a6b5"
+          ></script>
         )}
         <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
