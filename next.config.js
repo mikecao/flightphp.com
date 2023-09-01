@@ -6,7 +6,7 @@ module.exports = {
     return [
       {
         source: '/stats/:path*',
-        destination: 'http://stats.mikecao.com/:path*',
+        destination: 'https://stats.mikecao.com/:path*',
       },
     ];
   },
