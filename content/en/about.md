@@ -17,11 +17,15 @@ Flight::start();
 
 # Requirements
 
-Flight requires PHP 5.3 or greater.
+Flight requires PHP 7.4 or greater.
 
 # License
 
 Flight is released under the [MIT](https://github.com/mikecao/flight/blob/master/LICENSE) license.
+
+# Community
+
+We're on Matrix! Chat with us at [#flight-php-framework:matrix.org](https://matrix.to/#/#flight-php-framework:matrix.org).
 
 # Contributing
 
