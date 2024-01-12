@@ -176,3 +176,91 @@ Flight::route('/', function($route){
     $route->splat;
 }, true);
 ```
+## Route Grouping
+
+There may be times when you want to group related routes together (such as `/api/v1`).
+You can do this by using the `group` method:
+
+```php
+Flight::group('/api/v1', function () {
+  Flight::route('/users', function () {
+	// Matches /api/v1/users
+  });
+
+  Flight::route('/posts', function () {
+	// Matches /api/v1/posts
+  });
+});
+```
+
+You can even nest groups of groups:
+
+```php
+Flight::group('/api', function () {
+  Flight::group('/v1', function () {
+	// Flight::get() gets variables, it doesn't set a route! See object context below
+	Flight::route('GET /users', function () {
+	  // Matches GET /api/v1/users
+	});
+
+	Flight::post('/posts', function () {
+	  // Matches POST /api/v1/posts
+	});
+
+	Flight::put('/posts/1', function () {
+	  // Matches PUT /api/v1/posts
+	});
+  });
+  Flight::group('/v2', function () {
+
+	// Flight::get() gets variables, it doesn't set a route! See object context below
+	Flight::route('GET /users', function () {
+	  // Matches GET /api/v2/users
+	});
+  });
+});
+```
+
+### Grouping with Object Context
+
+You can still use route grouping with the `Engine` object in the following way:
+
+```php
+$app = new \flight\Engine();
+$app->group('/api/v1', function (Router $router) {
+  $router->get('/users', function () {
+	// Matches GET /api/v1/users
+  });
+
+  $router->post('/posts', function () {
+	// Matches POST /api/v1/posts
+  });
+});
+```
+
+## Route Aliasing
+
+You can assign an alias to a route, so that the URL can dynamically be generated later in your code (like a template for instance).
+
+```php
+Flight::route('/users/@id', function($id) { echo 'user:'.$id; }, false, 'user_view');
+
+// later in code somewhere
+Flight::getUrl('user_view', [ 'id' => 5 ]); // will return '/users/5'
+```
+
+This is especially helpful if your URL happens to change. In the above example, lets say that users was moved to `/admin/users/@id` instead.
+With aliasing in place, you don't have to change anywhere you reference the alias because the alias will now return `/admin/users/5` like in the 
+example above.
+
+Route aliasing still works in groups as well:
+
+```php
+Flight::group('/users', function() {
+    Flight::route('/@id', function($id) { echo 'user:'.$id; }, false, 'user_view');
+});
+
+
+// later in code somewhere
+Flight::getUrl('user_view', [ 'id' => 5 ]); // will return '/users/5'
+```
