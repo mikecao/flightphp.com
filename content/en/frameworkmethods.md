@@ -7,35 +7,36 @@ or overridden.
 
 ## Core Methods
 
-``` php
-Flight::map($name, $callback) // Creates a custom framework method.
-Flight::register($name, $class, [$params], [$callback]) // Registers a class to a framework method.
-Flight::before($name, $callback) // Adds a filter before a framework method.
-Flight::after($name, $callback) // Adds a filter after a framework method.
-Flight::path($path) // Adds a path for autoloading classes.
-Flight::get($key) // Gets a variable.
-Flight::set($key, $value) // Sets a variable.
-Flight::has($key) // Checks if a variable is set.
-Flight::clear([$key]) // Clears a variable.
+```php
+Flight::map(string $name, callable $callback, bool $pass_route = false) // Creates a custom framework method.
+Flight::register(string $name, string $class, array $params = [], ?callable $callback = null) // Registers a class to a framework method.
+Flight::before(string $name, callable $callback) // Adds a filter before a framework method.
+Flight::after(string $name, callable $callback) // Adds a filter after a framework method.
+Flight::path(string $path) // Adds a path for autoloading classes.
+Flight::get(string $key) // Gets a variable.
+Flight::set(string $key, mixed $value) // Sets a variable.
+Flight::has(string $key) // Checks if a variable is set.
+Flight::clear(array|string $key = []) // Clears a variable.
 Flight::init() // Initializes the framework to its default settings.
 Flight::app() // Gets the application object instance
 ```
 
 ## Extensible Methods
 
-``` php
+```php
 Flight::start() // Starts the framework.
 Flight::stop() // Stops the framework and sends a response.
-Flight::halt([$code], [$message]) // Stop the framework with an optional status code and message.
-Flight::route($pattern, $callback) // Maps a URL pattern to a callback.
-Flight::redirect($url, [$code]) // Redirects to another URL.
-Flight::render($file, [$data], [$key]) // Renders a template file.
-Flight::error($exception) // Sends an HTTP 500 response.
+Flight::halt(int $code = 200, string $message = '') // Stop the framework with an optional status code and message.
+Flight::route(string $pattern, callable $callback, bool $pass_route = false) // Maps a URL pattern to a callback.
+Flight::group(string $pattern, callable $callback) // Creates groupping for urls, pattern must be a string.
+Flight::redirect(string $url, int $code) // Redirects to another URL.
+Flight::render(string $file, array $data, ?string $key = null) // Renders a template file.
+Flight::error(Throwable $error) // Sends an HTTP 500 response.
 Flight::notFound() // Sends an HTTP 404 response.
-Flight::etag($id, [$type]) // Performs ETag HTTP caching.
-Flight::lastModified($time) // Performs last modified HTTP caching.
-Flight::json($data, [$code], [$encode], [$charset], [$option]) // Sends a JSON response.
-Flight::jsonp($data, [$param], [$code], [$encode], [$charset], [$option]) // Sends a JSONP response.
+Flight::etag(string $id, string $type = 'string') // Performs ETag HTTP caching.
+Flight::lastModified(int $time) // Performs last modified HTTP caching.
+Flight::json(mixed $data, int $code = 200, bool $encode = true, string $charset = 'utf8', int $option) // Sends a JSON response.
+Flight::jsonp(mixed $data, string $param = 'jsonp', int $code = 200, bool $encode = true, string $charset = 'utf8', int $option) // Sends a JSONP response.
 ```
 
 Any custom methods added with `map` and `register` can also be filtered.
