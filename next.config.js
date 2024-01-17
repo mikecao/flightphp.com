@@ -10,4 +10,13 @@ module.exports = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        destination: 'https://docs.flightphp.com/:path*',
+        permanent: true,
+      },
+    ]
+  },
 };
